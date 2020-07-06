@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 
+const environment = process.env
 const configuration = {
   connectionLimit: 100,
   host: '35.202.123.101',
@@ -22,7 +23,6 @@ const configuration = {
 const db = new Sequelize('partner_petualang', 'razer', '1', {
   ...configuration,
 })
-console.log({ ...configuration, db })
+console.log({ environment, configuration, db })
 
 module.exports = db
-
