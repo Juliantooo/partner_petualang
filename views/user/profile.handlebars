@@ -145,12 +145,11 @@
             <p class="section-lead">
               Change information about yourself on this page.
             </p>
-
             <div class="row mt-sm-4">
               <div class="col-12 col-md-12 col-lg-5">
                 <div class="card profile-widget">
                   <div class="profile-widget-header">
-                    <img alt="image" src="/assets/img/avatar/avatar-1.png"
+                    <img alt="image" src="/assets/images/userProfile/{{profile.foto}}.jpg"
                       class="rounded-circle profile-widget-picture">
                     <div class="profile-widget-items">
                       <div class="profile-widget-item">
@@ -178,7 +177,8 @@
               </div>
               <div class="col-12 col-md-12 col-lg-7">
                 <div class="card">
-                  <form method="post" class="needs-validation" novalidate="">
+                  <form method="post" class="needs-validation" enctype="multipart/form-data"
+                    action="/user/{{profile.id_user}}">
                     <div class="card-header">
                       <h4>Edit Profile</h4>
                     </div>
@@ -186,32 +186,41 @@
                       <div class="row">
                         <div class="form-group col-md-6 col-12">
                           <label>Nama Lengkap</label>
-                          <input type="text" class="form-control" value="{{profile.nama_lengkap}}" required="">
+                          <input type="text" class="form-control" name="nama_lengkap" value="{{profile.nama_lengkap}}"
+                            required="">
                         </div>
                         <div class="form-group col-md-6 col-12">
                           <label>username</label>
-                          <input type="text" class="form-control" value="{{profile.username}}" required="">
+                          <input type="text" class="form-control" name="username" value="{{profile.username}}"
+                            required="">
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-md-6 col-12">
                           <label>Email</label>
-                          <input type="email" class="form-control" value="{{profile.email}}" required="">
+                          <input type="email" class="form-control" name="email" value="{{profile.email}}" required="">
                         </div>
                         <div class="form-group col-md-6 col-12">
                           <label>No Hp</label>
-                          <input type="number" class="form-control" value="{{profile.no_hp}}" required="">
+                          <input type="text" class="form-control" name="no_hp" value="{{profile.no_hp}}" required="">
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-6">
                           <label>Alamat</label>
-                          <textarea class="form-control summernote-simple" id="alamat">{{profile.alamat}} </textarea>
+                          <textarea class="form-control summernote-simple" name="alamat"
+                            id="alamat">{{profile.alamat}} </textarea>
+                        </div>
+                        <div class="col-6 col-md-6">
+                          <div class="form-group">
+                            <label for="exampleFormControlFile1">Foto Profile</label>
+                            <input type="file" class="form-control-file" name="foto" id="exampleFormControlFile1">
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div class="card-footer text-right">
-                      <button class="btn btn-info">Perbarui Profile</button>
+                      <button type="submit" class="btn btn-info">Perbarui Profile</button>
                     </div>
                   </form>
                 </div>

@@ -1,7 +1,10 @@
-// const barang = require('express').Router()
-// const controller = require('../controller/barang')
-// const auth = require('../middleware/auth')
+const barang = require('express').Router()
+const controller = require('../controller/barangApi')
+const auth = require('../middleware/auth')
 
-// barang.post('/create', auth.adminAuth, controller.create)
+barang.get('/getall', controller.showAll)
+barang.post('/create', controller.create)
+barang.put('/:id', controller.update)
+barang.delete('/:id', controller.delete)
 
-// module.exports = barang
+module.exports = barang

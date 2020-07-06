@@ -82,7 +82,7 @@
           </li>
           <li class="dropdown"><a href="#" data-toggle="dropdown"
               class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-              <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+              <img alt="image" src="/assets/images/adminProfile/{{profile.foto}}.jpg" class="rounded-circle mr-1">
               <div class="d-sm-none d-lg-inline-block">Hi, {{profile.username}}!</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
@@ -157,7 +157,7 @@
               <div class="col-12 col-md-12 col-lg-5">
                 <div class="card profile-widget">
                   <div class="profile-widget-header">
-                    <img alt="image" src="/assets/img/avatar/avatar-1.png"
+                    <img alt="image" src="/assets/images/adminProfile/{{profile.foto}}.jpg"
                       class="rounded-circle profile-widget-picture">
                     <div class="profile-widget-items">
                       <div class="profile-widget-item">
@@ -185,7 +185,7 @@
                     name as a user in this template. Not a tribute, I'm just bored with <b>'John Doe'</b>.
                   </div>
                   <div class="card-footer text-center">
-                    <div class="font-weight-bold mb-2">Follow Ujang On</div>
+                    <div class="font-weight-bold mb-2">Follow {{profile.username}} On</div>
                     <a href="#" class="btn btn-social-icon btn-facebook mr-1">
                       <i class="fab fa-facebook-f"></i>
                     </a>
@@ -203,7 +203,8 @@
               </div>
               <div class="col-12 col-md-12 col-lg-7">
                 <div class="card">
-                  <form method="post" class="needs-validation" novalidate="">
+                  <form method="post" class="needs-validation" enctype="multipart/form-data"
+                    action="/admin/{{profile.id_admin}}">
                     <div class="card-header">
                       <h4>Edit Profile</h4>
                     </div>
@@ -223,6 +224,12 @@
                           <input type="email" class="form-control" value="{{profile.email}}" required="">
                           <div class="invalid-feedback">
                             Please fill in the email
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                          <div class="form-group">
+                            <label for="exampleFormControlFile1">Foto Profile</label>
+                            <input type="file" class="form-control-file mt-2" name="foto" id="exampleFormControlFile1">
                           </div>
                         </div>
                         <div class="row">
@@ -245,7 +252,7 @@
                         </div>
                       </div>
                       <div class="card-footer text-right">
-                        <button class="btn btn-primary">Save Changes</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                       </div>
                   </form>
                 </div>

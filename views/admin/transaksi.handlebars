@@ -77,7 +77,7 @@
           </li>
           <li class="dropdown"><a href="#" data-toggle="dropdown"
               class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-              <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+              <img alt="image" src="/assets/images/adminProfile/{{profile.foto}}.jpg" class="rounded-circle mr-1">
               <div class="d-sm-none d-lg-inline-block">Hi, {{profile.username}}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
@@ -185,9 +185,12 @@
                           <td>{{pembayaran}}</td>
                           <td>{{status}}</td>
                           <td>
-                            <button class="btn btn-secondary"><i class="fas fa-info"></i></button>
+                            <button class="btn btn-secondary"
+                              data-id="{{nama_barang}},{{kirim_barang}},{{pembayaran}},{{tanggal_sewa}},{{tanggal_kembali}}"
+                              data-toggle="modal" data-target="#modalDetailTransaksi"><i
+                                class="fas fa-info"></i></button>
                             {{#if isDisable}}
-                            <button class="btn btn-info" disabled="true" data-toggle="modal"
+                            <button class="btn btn-info disabled" data-toggle="modal"
                               data-target="#modalUpdateTransaksi" data-id="{{status}},{{id_transaksi}}"><i
                                 class="fas fa-pencil-alt"></i></button>
                             {{else}}
@@ -264,6 +267,103 @@
       </div>
     </div>
   </div>
+  <!-- Modal Info -->
+  <div class="modal fade" id="modalDetailTransaksi" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Info Transaksi</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Nama barang</label>
+                  <input type="text" name="nama_barang" id="nama_barang" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengiriman/Pengambilan</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="pengiriman" id="pengiriman" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pembayaran</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-money-bill-alt"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="nama_barang" id="pembayaran" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengembalian</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="nama_barang" id="pengembalian" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Sewa</label>
+                  <input name="tanggal_sewa" type="date" id="tanggal_sewa" class="form-control datepicker">
+                  </di>
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Kembali</label>
+                  <input name="tanggal_kembali" id="tanggal_kembali" type="date" class="form-control datepicker">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-info" value="Buat Transaksi">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btnInfo = document.getElementsByTagName('tr')
+    let idx, res
+    for (idx = 0; idx < btnInfo.length; idx++) {
+      let a = btnInfo[idx + 1].getElementsByTagName('td')[11].getElementsByTagName('button')[0]
+      a.addEventListener('click', () => {
+        res = a.getAttributeNode('data-id').textContent.split(',')
+        document.getElementById('nama_barang').setAttribute('value', res[0])
+        document.getElementById('pengiriman').setAttribute('value', res[1].split('/', 1))
+        document.getElementById('pengembalian').setAttribute('value', res[1].split('/', 2, 1)[1])
+        document.getElementById('pembayaran').setAttribute('value', res[2])
+        document.getElementById('tanggal_sewa').setAttribute('value', res[3])
+        document.getElementById('tanggal_kembali').setAttribute('value', res[4])
+      })
+    }
+  </script>
 
   <script>
     const id = document.getElementById('get-id').getAttribute('data-id')

@@ -23,9 +23,7 @@ const User = db.define('user', {
         min: 6
     },
     no_hp: {
-        type: Sequelize.NUMBER,
-        min: 11,
-        max: 12
+        type: Sequelize.STRING
     },
     alamat: {
         type: Sequelize.TEXT

@@ -17,6 +17,9 @@ const Admin = db.define('admin', {
     password: {
         type: Sequelize.STRING,
         min: 6
+    },
+    foto: {
+        type: Sequelize.STRING
     }
 }, {
     freezeTableName: true

@@ -8,6 +8,7 @@ const Transaksi = require('../models/transaksi')
 const Keranjang = require('../models/keranjang')
 const db = require('../config/db')
 const { QueryTypes, Sequelize, SELECT } = require('sequelize')
+const date = new Date()
 
 module.exports = {
     create: async (req, res) => {
@@ -58,6 +59,7 @@ module.exports = {
                     where: { email: email }
                 }).then(dataValues => {
                     user = dataValues
+                    console.log(user)
                     return bcrypt.compare(password, dataValues.password)
                 }).then((ress) => {
                     if (ress) {
@@ -74,6 +76,7 @@ module.exports = {
                         res.cookie('email', user.email)
                         res.cookie('nama_lengkap', user.nama_lengkap)
                         res.cookie('no_hp', user.no_hp)
+                        res.cookie('foto', user.foto)
                         res.cookie('alamat', user.alamat)
                         res.cookie('token', token, { expire: 600000 + Date.now() })
                     }
@@ -127,7 +130,7 @@ module.exports = {
                 `SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.id_transaksi,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_keranjang = keranjang.id_keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang WHERE user.id_user='${profile.id_user}'`
                 , { type: QueryTypes.SELECT })
             data = await db.query(
-                `SELECT * FROM Keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang`
+                `SELECT * FROM Keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang WHERE Keranjang.id_user='${req.cookies.id_user}'`
                 , { type: QueryTypes.SELECT })
             array.push(data, transaksi)
 
@@ -160,9 +163,23 @@ module.exports = {
             console.log(error)
         }
     },
+    update: async (req, res) => {
+        try {
+            let { nama_lengkap, username, email, no_hp, alamat } = req.body
+            let foto = `foto-${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}`
+            await User.update({
+                nama_lengkap, username, email, no_hp, alamat, foto
+            }, {
+                where: { id_user: req.params.id }
+            }).then(result => {
+                res.redirect(`/user/${req.cookies.id_user}/profile`)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
     createTransaksi: async (req, res) => {
         try {
-
             let { id_keranjang, kirim_barang, pembayaran, pengembalian, tanggal_sewa, tanggal_kembali } = req.body
             let id_user = req.cookies.id_user, status = "Menunggu Konfirmasi", id_admin = '223034e6-e1e5-49f4-94fb-33ac407c0748'
             kirim_barang = kirim_barang.concat('/', ' ', pengembalian)

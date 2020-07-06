@@ -3,12 +3,11 @@ const bcrypt = require('bcrypt')
 const generateToken = require('../services/generateToken')
 const uuid = require('uuid')
 const Joi = require('@hapi/joi')
-const Transaksi = require('../models/transaksi')
 const User = require('../models/user')
 const Barang = require('../models/barang')
-const Keranjang = require('../models/keranjang')
 const { QueryTypes, Sequelize, SELECT } = require('sequelize')
 const db = require('../config/db')
+const date = new Date()
 
 module.exports = {
     create: async (req, res) => {
@@ -72,6 +71,7 @@ module.exports = {
                         res.cookie('id_admin', admin.id_admin)
                         res.cookie('email', admin.email)
                         res.cookie('username', admin.username)
+                        res.cookie('foto', admin.foto)
                         res.cookie('token', token, { expire: 600000 + Date.now() })
                     }
                     res.redirect(`${admin.id_admin}`)
@@ -107,14 +107,13 @@ module.exports = {
             const transaksi = await db.query(
                 "SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.id_transaksi,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_keranjang = keranjang.id_keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang"
                 , { type: QueryTypes.SELECT })
-
             transaksi.forEach(element => {
                 switch (element.status.toLocaleLowerCase()) {
-                    case 'Menunggu Konfirmasi'.toLocaleLowerCase():
-                        element.isDisable = false
+                    case 'Selesai'.toLocaleLowerCase():
+                        element.isDisable = true
                         break;
                     default:
-                        element.isDisable = true
+                        element.isDisable = false
                 }
             });
             console.log(transaksi)
@@ -155,6 +154,20 @@ module.exports = {
                 .then(data => {
                     res.render('admin/list_barang', { profile, data })
                 })
+        } catch (error) {
+            console.log(error)
+        }
+    }, update: async (req, res) => {
+        try {
+            let { username, email, } = req.body
+            let foto = `foto-${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}`
+            await Admin.update({
+                username, email, foto
+            }, {
+                where: { id_admin: req.params.id }
+            }).then(result => {
+                res.redirect(`/admin/${req.cookies.id_admin}/profile`)
+            })
         } catch (error) {
             console.log(error)
         }

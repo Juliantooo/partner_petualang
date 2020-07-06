@@ -9,6 +9,9 @@ const Keranjang = db.define('keranjang', {
     id_barang: {
         type: Sequelize.INTEGER
     },
+    id_user: {
+        type: Sequelize.STRING
+    },
     jumlah: {
         type: Sequelize.INTEGER
     }
