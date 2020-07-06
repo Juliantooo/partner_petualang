@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 
 //configure database
 const db = new Sequelize('partner_petualang', 'razer', '1', {
-    host: '35.202.123.101',
+    host: 'perciachan',
     dialect: 'mysql',
     operatorsAlias: false,
     pool: {
