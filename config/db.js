@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 
 //configure database
 const db = new Sequelize('partner_petualang', 'razer', '1', {
+    connectionLimit: 100,
     host: '35.202.123.101',
     dialect: 'mysql',
     port: 3306,
@@ -12,6 +13,9 @@ const db = new Sequelize('partner_petualang', 'razer', '1', {
         acquire: 30000,
         evict: 15000,
         idle: 20000
+    },
+    dialectOptions: {
+        connectTimeout: 60000
     }
 })
 
