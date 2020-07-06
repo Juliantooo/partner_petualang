@@ -1,11 +1,13 @@
 {
   "name": "partner-petualang",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "engines": {
-    "node": "10.15.1"
+    "node": "10.15.1",
+    "npm": "6.13.0"
   },
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app",
