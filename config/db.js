@@ -2,15 +2,8 @@ const Sequelize = require('sequelize')
 
 //configure database
 const db = new Sequelize('partner_petualang', 'razer', '1', {
-    host: 'localhost',
-    dialect: 'mysql',
-    operatorsAlias: false,
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    }
+    host: 'perciachan.xyz',
+    dialect: 'mysql'
 })
 
 module.exports = db
