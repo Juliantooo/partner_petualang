@@ -1,5 +1,6 @@
 const Barang = require('../models/barang')
 const Joi = require('@hapi/joi')
+var date = new Date()
 
 module.exports = {
     create: async (req, res) => {
@@ -13,8 +14,8 @@ module.exports = {
                 stock: Joi.number().required()
             })
             let data = { nama_barang, harga_barang, stock }
-            console.log(data)
             const result = barangSchema.validate(data)
+            foto = `foto-${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}`
             const { value, error } = result
             const valid = error == null
             if (!valid) {
@@ -22,7 +23,7 @@ module.exports = {
                 console.log(error)
             } else {
                 Barang.create({
-                    nama_barang, harga_barang, stock
+                    nama_barang, harga_barang, stock, foto
                 }).then(() => {
                     res.redirect(`/admin/${req.cookies.id_admin}/barang`)
                 })
@@ -43,14 +44,18 @@ module.exports = {
     },
     update: async (req, res) => {
         try {
-            console.log(req.body)
+            let foto = `foto-${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}`
+            console.log(req.body.nama_barang)
             Barang.update({
                 nama_barang: req.body.nama_barang,
                 harga_barang: req.body.harga_barang,
-                stock: req.body.stock
+                stock: req.body.stock,
+                foto: foto
             }, {
                 where: { id_barang: req.params.id }
-            }).then(result => res.redirect(`/admin/${req.cookies.id_admin}/barang`))
+            }).then(result => {
+                res.redirect(`/admin/${req.cookies.id_admin}/barang`)
+            })
         } catch (error) {
             console.log(error)
         }

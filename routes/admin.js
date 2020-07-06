@@ -2,6 +2,7 @@ const admin = require('express').Router()
 const controler = require('../controller/admin')
 const auth = require('../middleware/auth')
 const barangController = require('../controller/barang')
+const upload = require('../services/upload')
 
 admin.get('/login', (req, res) => {
     res.render('loginAdmin')
@@ -17,9 +18,9 @@ admin.get('/:id', auth.adminAuth, controler.admin)
 admin.get('/:id/transaksi', auth.adminAuth, controler.transaksi)
 admin.get('/:id/profile', auth.adminAuth, controler.setting)
 admin.get('/:id/users', auth.adminAuth, controler.getUsers)
-admin.post('/:id/barang', auth.adminAuth, barangController.create)
+admin.post('/:id/barang', [auth.adminAuth, upload.single('foto')], barangController.create)
 admin.get('/:id/barang', auth.adminAuth, controler.getAllBarang)
 admin.post('/:id/barang/:id', auth.adminAuth, barangController.delete)
-admin.post('/:id/barang/update/:id', auth.adminAuth, barangController.update)
+admin.post('/:id/barang/update/:id', [auth.adminAuth, upload.single('foto')], barangController.update)
 
 module.exports = admin

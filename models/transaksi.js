@@ -6,7 +6,7 @@ const { Sequelize } = require('sequelize')
 
 const Transaksi = db.define('transaksi', {
     id_transaksi: {
-        type: Sequielize.STRING,
+        type: Sequielize.INTEGER,
         primaryKey: true
     },
     id_user: {

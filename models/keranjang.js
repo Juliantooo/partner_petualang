@@ -6,9 +6,6 @@ const Keranjang = db.define('keranjang', {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
-    id_transaksi: {
-        type: Sequelize.STRING
-    },
     id_barang: {
         type: Sequelize.INTEGER
     },

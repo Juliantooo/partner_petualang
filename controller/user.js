@@ -5,6 +5,7 @@ const generateToken = require('../services/generateToken')
 const Joi = require('@hapi/joi')
 const Barang = require('../models/barang')
 const Transaksi = require('../models/transaksi')
+const Keranjang = require('../models/keranjang')
 const db = require('../config/db')
 const { QueryTypes, Sequelize, SELECT } = require('sequelize')
 
@@ -121,10 +122,16 @@ module.exports = {
     transaksi: async (req, res) => {
         try {
             const profile = req.cookies
+            let data, array = []
             const transaksi = await db.query(
-                `SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_transaksi = keranjang.id_transaksi INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang WHERE user.id_user='${profile.id_user}'`
+                `SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_keranjang = keranjang.id_keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang WHERE user.id_user='${profile.id_user}'`
                 , { type: QueryTypes.SELECT })
-            res.render('user/transaksi', { transaksi, profile })
+            data = await db.query(
+                `SELECT * FROM Keranjang`
+                , { type: QueryTypes.SELECT })
+            array.push(data, transaksi)
+            console.log(array)
+            res.render('user/transaksi', { array, transaksi, profile })
         } catch (error) {
             console.log(error)
         }

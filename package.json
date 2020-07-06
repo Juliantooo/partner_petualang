@@ -20,6 +20,7 @@
     "express-handlebars": "^4.0.4",
     "handlebars-helpers": "^0.10.0",
     "joi-json": "^4.0.0",
+    "multer": "^1.4.2",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.4",
     "sequelize": "^5.21.11",

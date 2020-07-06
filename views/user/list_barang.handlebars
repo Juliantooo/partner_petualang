@@ -129,7 +129,7 @@
             <div class="section-header-breadcrumb">
               <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
               <div class="breadcrumb-item"><a href="#">Components</a></div>
-              <div class="breadcrumb-item">Table</div>
+              <div class="breadcrumb-item">Daftar Transaksi</div>
             </div>
           </div>
 
@@ -140,11 +140,13 @@
             <div class="row container-fluid my-5 justify-content-center">
               {{#each data}}
               <div class="card col-12 col-sm-12 col-md-3 mx-2 text-center" style="width: 10rem;">
-                <img class="card-img-top" src="..." alt="Card image cap">
+                <img class="card-img-top" src="/assets/images/produk/{{dataValues.foto}}.jpg" alt="Card image cap">
                 <div class="card-body">
                   <h6 class="card-title">{{dataValues.nama_barang}}</h6>
                   <h6 class="card-subtitle" style="font-size:109%">Rp.{{dataValues.harga_barang}}</h6><br>
-                  <button class="btn btn-info">Tambah ke keranjang</button>
+                  <button class="btn btn-info btnKeranjang" data-id="{{dataValues.id_barang}}" data-toggle="modal"
+                    data-target="#ModalAddKeranjang">Tambah ke
+                    keranjang</button>
                 </div>
               </div>
               {{/each}}
@@ -157,121 +159,46 @@
             Azhar</a>
         </div>
         <div class="footer-right">
-
         </div>
       </footer>
     </div>
   </div>
-  <!-- Modal Tambah Barang-->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="ModalAddKeranjang" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Tambah Barang</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form action="/user/{{profile.id_user}}/barang" method="POST">
-            <div class="form-group">
-              <label>Nama Barang</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    a
-                  </div>
-                </div>
-                <input type="text" name="nama_barang" class="form-control currency">
+        <form action="/user/{{profile.id_user}}/keranjang" method="post" class="row text-center justify-content-center">
+          <div class="modal-body">
+            <h5 class="card-title ">Tambahkan Barang ini ke keranjang ?</h5>
+            <div class="form-group w-50 mx-auto">
+              <input type="hidden" id="hiddenId" name="id_barang" value="">
+              <label for="example-number-input" class="label">Jumlah</label>
+              <div class="col-10 ml-3">
+                <input class="form-control" name="jumlah" type="number" min="1" max="5" value="1"
+                  id="example-number-input">
               </div>
             </div>
-            <div class="form-group">
-              <label>Harga Barang</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    $
-                  </div>
-                </div>
-                <input type="text" name="harga_barang" class="form-control currency">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Stock</label>
-              <div class="input-group w-50">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    $
-                  </div>
-                </div>
-                <input type="text" class="form-control currency" name="stock">
-              </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <input type="submit" class="btn btn-info" value="Tambah">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        </div>
+          </div>
+          <div class="modal-footer">
+            <button type="subbmit" class="btn btn-info">Tambahkan</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
         </form>
       </div>
     </div>
   </div>
-  <!-- Modal Update -->
-  <div class="modal fade" id="ModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Update Barang</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="form-update" method="POST">
-            <div class="form-group">
-              <label>Nama Barang</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    $
-                  </div>
-                </div>
-                <input id="nama_barang" type="text" name="nama_barang" class="form-control currency">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Harga Barang</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    $
-                  </div>
-                </div>
-                <input type="text" id="harga_barang" name="harga_barang" class="form-control currency">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Stock</label>
-              <div class="input-group w-50">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    $
-                  </div>
-                </div>
-                <input type="text" id="stock" class="form-control currency" name="stock">
-              </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <input type="submit" class="btn btn-info" value="Update Barang">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
+
+  <script>
+    let btnKeranjang = document.querySelectorAll('.btnKeranjang')
+    let id = document.getElementById('hiddenId')
+    for (let btn of btnKeranjang) {
+      btn.addEventListener('click', () => {
+        id.setAttribute('value', btn.dataset.id)
+      })
+    }
+  </script>
 
 
 
@@ -294,19 +221,6 @@
   <script src="/assets/js/scripts.js"></script>
   <script src="/assets/js/custom.js"></script>
   <script>
-
-    const btnUpdate = document.getElementsByTagName('tr')
-    let idx, res
-    for (idx = 0; idx < btnUpdate.length; idx++) {
-      let a = btnUpdate[idx + 1].getElementsByTagName('td')[5].getElementsByTagName('button')[0]
-      a.addEventListener('click', () => {
-        res = a.getAttributeNode('data-id').textContent.split(',')
-        document.getElementById('form-update').setAttribute('action', '/user/{{profile.id_user}}/barang/update/' + `${res[0]}`)
-        document.getElementById('nama_barang').setAttribute('value', res[1])
-        document.getElementById('harga_barang').setAttribute('value', res[2])
-        document.getElementById('stock').setAttribute('value', res[3])
-      })
-    }
   </script>
 
 </body>

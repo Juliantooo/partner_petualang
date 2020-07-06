@@ -11,7 +11,8 @@ const Barang = db.define('barang', {
     },
     harga_barang: {
         type: Sequelize.INTEGER
-    }, stock: {
+    },
+    stock: {
         type: Sequelize.INTEGER
     },
     foto: {

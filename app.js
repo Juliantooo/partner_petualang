@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser')
 const exphbs = require('express-handlebars')
 const db = require('./config/db')
 const path = require('path')
+const bodyParser = require('body-parser')
+
 
 
 //setup app
@@ -13,7 +15,6 @@ const app = express()
 db.authenticate()
     .then(() => console.log('database connected'))
     .catch(err => console.log(err))
-
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 // app.engine('handlebars', exphbs({ defaultLayout: 'main' }))

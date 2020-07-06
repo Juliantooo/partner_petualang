@@ -138,18 +138,19 @@
           </div>
 
           <div class="section-body">
-            <h2 class="section-title">Table</h2>
+            <h2 class="section-title">Daftar transaksi</h2>
             <p class="section-lead">Daftar transaksi user di partner petualang</p>
 
             <div class="row">
               <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Daftar Transaksi</h4>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#modalAddTransaksi">Buat
+                      Transaksi</button>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table class="table table-bordered table-md">
+                      <table class="table table-bordered table-md text-center">
                         <tr>
                           <th>No</th>
                           <th>User</th>
@@ -174,7 +175,7 @@
                           <td>{{tanggal_sewa}}</td>
                           <td>{{tanggal_kembali}}</td>
                           <td>{{kirim_barang}}</td>
-                          <td>Total</td>
+                          <td>{{math jumlah '*' harga_barang}}</td>
                           <td>{{pembayaran}}</td>
                           <td>{{status}}</td>
                           <td>
@@ -218,6 +219,82 @@
 
         </div>
       </footer>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalAddTransaksi" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Buat Transaksi</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="form-update" method="POST" enctype="multipart/form-data">
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Id barang</label>
+                  <select class="form-control">
+                    {{#each array}}
+                    {{#each this}}
+                    <option value="{{id_barang}}">{{id_barang}}</option>
+                    {{/each}}
+                    {{/each}}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengiriman</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <input id="nama_barang" type="text" name="nama_barang" class="form-control currency">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pembayaran</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-money-bill-alt"></i>
+                    </div>
+                  </div>
+                  <input id="nama_barang" type="text" name="nama_barang" class="form-control currency">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Sewa</label>
+                  <input type="date" class="form-control datepicker">
+                  </di>
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Kembali</label>
+                  <input type="date" class="form-control datepicker">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-info" value="Update Barang">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
