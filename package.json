@@ -1,5 +1,5 @@
 {
-  "name": "greatmeal",
+  "name": "partner petualang",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "dev": "nodemon app"
   },
   "keywords": [],
-  "author": "",
+  "author": "Fajar Julianto",
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
