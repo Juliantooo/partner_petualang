@@ -1,5 +1,5 @@
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const uuid = require('uuid')
 const generateToken = require('../services/generateToken')
 const Joi = require('@hapi/joi')

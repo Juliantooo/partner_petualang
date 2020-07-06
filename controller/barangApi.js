@@ -1,7 +1,5 @@
 const Barang = require('../models/barang')
 const Joi = require('@hapi/joi')
-const { report } = require('../routes/user')
-const { response } = require('express')
 var date = new Date()
 
 module.exports = {

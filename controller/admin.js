@@ -1,5 +1,5 @@
 const Admin = require('../models/admin')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const generateToken = require('../services/generateToken')
 const uuid = require('uuid')
 const Joi = require('@hapi/joi')
