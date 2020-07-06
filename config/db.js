@@ -1,10 +1,9 @@
 const Sequelize = require('sequelize')
 
-const environment = process.env
-const { username, password, hostname, database } = environment
+const { CLEARDB_DATABASE_URL } = process.env
 const configuration = {
   connectionLimit: 100,
-  host: hostname,
+  host: 'localhost',
   dialect: 'mysql',
   port: 3306,
   operatorsAlias: false,
@@ -21,7 +20,7 @@ const configuration = {
 }
 
 //configure database
-const db = new Sequelize(database, username, password, { ...configuration })
-console.log({ environment, configuration, db })
+const db = new Sequelize(CLEARDB_DATABASE_URL)
+console.log({ configuration, db })
 
 module.exports = db
