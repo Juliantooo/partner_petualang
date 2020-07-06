@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize')
 
 //configure database
-const db = new Sequelize('partner_petualang', 'root', '', {
-    host: 'localhost',
+const db = new Sequelize('partner_petualang', 'razer', '1', {
+    host: 'https://perciachan.xyz/',
     dialect: 'mysql',
     operatorsAlias: false,
     pool: {
