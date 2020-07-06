@@ -9,6 +9,10 @@ const Transaksi = db.define('transaksi', {
         type: Sequielize.INTEGER,
         primaryKey: true
     },
+    id_keranjang: {
+        type: Sequelize.INTEGER
+
+    },
     id_user: {
         type: Sequielize.STRING
     },

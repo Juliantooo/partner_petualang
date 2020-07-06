@@ -122,15 +122,26 @@ module.exports = {
     transaksi: async (req, res) => {
         try {
             const profile = req.cookies
-            let data, array = []
+            let data, array = [], sts
             const transaksi = await db.query(
-                `SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_keranjang = keranjang.id_keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang WHERE user.id_user='${profile.id_user}'`
+                `SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.id_transaksi,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_keranjang = keranjang.id_keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang WHERE user.id_user='${profile.id_user}'`
                 , { type: QueryTypes.SELECT })
             data = await db.query(
-                `SELECT * FROM Keranjang`
+                `SELECT * FROM Keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang`
                 , { type: QueryTypes.SELECT })
             array.push(data, transaksi)
-            console.log(array)
+
+            transaksi.forEach(element => {
+                switch (element.status.toLocaleLowerCase()) {
+                    case 'Menunggu Konfirmasi'.toLocaleLowerCase():
+                        element.isDisable = false
+                        break;
+                    default:
+                        element.isDisable = true
+                }
+            });
+            console.log(transaksi)
+
             res.render('user/transaksi', { array, transaksi, profile })
         } catch (error) {
             console.log(error)
@@ -144,6 +155,21 @@ module.exports = {
             }).then(data => {
                 let profile = data.dataValues
                 res.render('user/profile', { profile })
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    createTransaksi: async (req, res) => {
+        try {
+
+            let { id_keranjang, kirim_barang, pembayaran, pengembalian, tanggal_sewa, tanggal_kembali } = req.body
+            let id_user = req.cookies.id_user, status = "Menunggu Konfirmasi", id_admin = '223034e6-e1e5-49f4-94fb-33ac407c0748'
+            kirim_barang = kirim_barang.concat('/', ' ', pengembalian)
+            await Transaksi.create({
+                id_keranjang, id_user, id_admin, status, tanggal_sewa, tanggal_kembali, pembayaran, kirim_barang
+            }).then(result => {
+                res.redirect(`/user/${id_user}/transaksi`)
             })
         } catch (error) {
             console.log(error)

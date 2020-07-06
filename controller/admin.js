@@ -105,8 +105,19 @@ module.exports = {
         try {
             const profile = req.cookies
             const transaksi = await db.query(
-                "SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_keranjang = keranjang.id_keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang"
+                "SELECT User.username,Keranjang.jumlah,Barang.nama_barang,Barang.harga_barang,Transaksi.status,Transaksi.tanggal_sewa,Transaksi.tanggal_kembali,Transaksi.id_transaksi,Transaksi.pembayaran,Transaksi.kirim_barang FROM Transaksi INNER JOIN User ON Transaksi.id_user = User.id_user INNER JOIN Keranjang ON Transaksi.id_keranjang = keranjang.id_keranjang INNER JOIN Barang ON Keranjang.id_barang = Barang.id_barang"
                 , { type: QueryTypes.SELECT })
+
+            transaksi.forEach(element => {
+                switch (element.status.toLocaleLowerCase()) {
+                    case 'Menunggu Konfirmasi'.toLocaleLowerCase():
+                        element.isDisable = false
+                        break;
+                    default:
+                        element.isDisable = true
+                }
+            });
+            console.log(transaksi)
             res.render('admin/transaksi', { transaksi, profile })
 
         } catch (error) {

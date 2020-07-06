@@ -3,6 +3,7 @@ const controler = require('../controller/admin')
 const auth = require('../middleware/auth')
 const barangController = require('../controller/barang')
 const upload = require('../services/upload')
+const transaksiController = require('../controller/transaksi')
 
 admin.get('/login', (req, res) => {
     res.render('loginAdmin')
@@ -22,5 +23,6 @@ admin.post('/:id/barang', [auth.adminAuth, upload.single('foto')], barangControl
 admin.get('/:id/barang', auth.adminAuth, controler.getAllBarang)
 admin.post('/:id/barang/:id', auth.adminAuth, barangController.delete)
 admin.post('/:id/barang/update/:id', [auth.adminAuth, upload.single('foto')], barangController.update)
+admin.post('/:id/transaksi/:id', auth.adminAuth, transaksiController.updateStatus)
 
 module.exports = admin

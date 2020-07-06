@@ -144,7 +144,7 @@
             </div>
           </div>
 
-          <div class="section-body">
+          <div class="section-body" id="get-id" data-id="{{profile.id_admin}}">
             <h2 class="section-title">Table</h2>
             <p class="section-lead">Daftar transaksi user di partner petualang</p>
 
@@ -181,12 +181,19 @@
                           <td>{{tanggal_sewa}}</td>
                           <td>{{tanggal_kembali}}</td>
                           <td>{{kirim_barang}}</td>
-                          <td>Total</td>
+                          <td>{{math harga_barang '*' jumlah}}</td>
                           <td>{{pembayaran}}</td>
                           <td>{{status}}</td>
                           <td>
                             <button class="btn btn-secondary"><i class="fas fa-info"></i></button>
-                            <button class="btn btn-info"><i class="fas fa-pencil-alt"></i></button>
+                            {{#if isDisable}}
+                            <button class="btn btn-info" disabled="true" data-toggle="modal"
+                              data-target="#modalUpdateTransaksi" data-id="{{status}},{{id_transaksi}}"><i
+                                class="fas fa-pencil-alt"></i></button>
+                            {{else}}
+                            <button class="btn btn-info" data-toggle="modal" data-target="#modalUpdateTransaksi"
+                              data-id="{{status}},{{id_transaksi}}"><i class="fas fa-pencil-alt"></i></button>
+                            {{/if}}
                           </td>
                           <td>
                         </tr>
@@ -227,6 +234,52 @@
       </footer>
     </div>
   </div>
+  <!-- Modal Update -->
+  <div class="modal fade" id="modalUpdateTransaksi" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Status</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="form-update-transaksi" method="POST" class="mt-5">
+            <div class="row justify-content-center">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group text-center w-100">
+                  <input type="text" name="status" id="status" class="form-control">
+                  <small class="text-muted form-text pt-2">Menunggu Konfirmasi / Diproses / Selesai</small>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <input type="submit" class="btn btn-info" value="Edit Transaksi">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const id = document.getElementById('get-id').getAttribute('data-id')
+    const btnUpdate = document.getElementsByTagName('tr')
+    let j, result
+    for (j = 0; j < btnUpdate.length; j++) {
+      let a = btnUpdate[j + 1].getElementsByTagName('td')[11].getElementsByTagName('button')[1]
+      a.addEventListener('click', () => {
+        result = a.getAttributeNode('data-id').textContent.split(',')
+        console.log(result)
+        document.getElementById('form-update-transaksi').setAttribute('action', `/admin/${id}/transaksi/${result[1]}`)
+        document.getElementById('status').setAttribute('value', result[0])
+      })
+    }
+  </script>
+
 
   <!-- General JS Scripts -->
   <script src="/assets/modules/jquery.min.js"></script>

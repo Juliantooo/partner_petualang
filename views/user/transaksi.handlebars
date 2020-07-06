@@ -148,7 +148,7 @@
                     <button class="btn btn-info" data-toggle="modal" data-target="#modalAddTransaksi">Buat
                       Transaksi</button>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body" id="formCreate" data-id="{{profile.id_user}}">
                     <div class="table-responsive">
                       <table class="table table-bordered table-md text-center">
                         <tr>
@@ -179,8 +179,21 @@
                           <td>{{pembayaran}}</td>
                           <td>{{status}}</td>
                           <td>
-                            <button class="btn btn-secondary"><i class="fas fa-info"></i></button>
-                            <button class="btn btn-info"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="btn btn-secondary"
+                              data-id="{{nama_barang}},{{kirim_barang}},{{pembayaran}},{{tanggal_sewa}},{{tanggal_kembali}}"
+                              data-toggle="modal" data-target="#modalDetailTransaksi"><i
+                                class="fas fa-info"></i></button>
+                            {{#if isDisable}}
+                            <button class="btn btn-info" disabled="true"
+                              data-id="{{nama_barang}},{{kirim_barang}},{{pembayaran}},{{tanggal_sewa}},{{tanggal_kembali}},{{id_transaksi}},{{profile.id_user}}"
+                              data-toggle="modal" data-target="#modalUpdateTransaksi"><i
+                                class="fas fa-pencil-alt"></i></button>
+                            {{else}}
+                            <button class="btn btn-info"
+                              data-id="{{nama_barang}},{{kirim_barang}},{{pembayaran}},{{tanggal_sewa}},{{tanggal_kembali}},{{id_transaksi}},{{profile.id_user}}"
+                              data-toggle="modal" data-target="#modalUpdateTransaksi"><i
+                                class="fas fa-pencil-alt"></i></button>
+                            {{/if}}
                           </td>
                           <td>
                         </tr>
@@ -234,29 +247,32 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="form-update" method="POST" enctype="multipart/form-data">
+          <form method="POST" action="/user/{{profile.id_user}}/transaksi">
             <div class="row">
               <div class="form-group col-12 col-sm-12 col-md-6">
                 <div class="form-group">
-                  <label>Id barang</label>
-                  <select class="form-control">
+                  <label>Nama barang</label>
+                  <select name="id_keranjang" class="form-control">
                     {{#each array}}
                     {{#each this}}
-                    <option value="{{id_barang}}">{{id_barang}}</option>
+                    <option value="{{id_keranjang}}">{{nama_barang}}</option>
                     {{/each}}
                     {{/each}}
                   </select>
                 </div>
               </div>
               <div class="form-group col-12 col-sm-12 col-md-6">
-                <label>Pengiriman</label>
+                <label>Pengiriman/Pengambilan</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
                       <i class="fas fa-boxes"></i>
                     </div>
                   </div>
-                  <input id="nama_barang" type="text" name="nama_barang" class="form-control currency">
+                  <select name="kirim_barang" id="" class="form-control">
+                    <option value="Ambil Sendiri">Ambil Sendiri</option>
+                    <option value="Grab/Gojek">Grab/Gojek</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -269,7 +285,27 @@
                       <i class="fas fa-money-bill-alt"></i>
                     </div>
                   </div>
-                  <input id="nama_barang" type="text" name="nama_barang" class="form-control currency">
+                  <select name="pembayaran" id="" class="form-control">
+                    <option value="Cash">Cash</option>
+                    <option value="Gopay">Gopay</option>
+                    <option value="Dana">Dana</option>
+                    <option value="Ovo">Ovo</option>
+                    <option value="Transfer BRI">Transfer Bank BRI (A/N Yoga)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengembalian</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <select name="pengembalian" id="" class="form-control">
+                    <option value="Hantar">Hantar</option>
+                    <option value="Grab/Gojek">Grab/Gojek</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -277,19 +313,19 @@
               <div class="form-group col-12 col-sm-12 col-md-6">
                 <div class="form-group">
                   <label>Tanggal Sewa</label>
-                  <input type="date" class="form-control datepicker">
+                  <input name="tanggal_sewa" type="date" class="form-control datepicker">
                   </di>
                 </div>
               </div>
               <div class="form-group col-12 col-sm-12 col-md-6">
                 <div class="form-group">
                   <label>Tanggal Kembali</label>
-                  <input type="date" class="form-control datepicker">
+                  <input name="tanggal_kembali" type="date" class="form-control datepicker">
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <input type="submit" class="btn btn-info" value="Update Barang">
+              <input type="submit" class="btn btn-info" value="Buat Transaksi">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
           </form>
@@ -297,6 +333,204 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Info -->
+  <div class="modal fade" id="modalDetailTransaksi" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Info Transaksi</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Nama barang</label>
+                  <input type="text" name="nama_barang" id="nama_barang" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengiriman/Pengambilan</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="pengiriman" id="pengiriman" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pembayaran</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-money-bill-alt"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="nama_barang" id="pembayaran" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengembalian</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="nama_barang" id="pengembalian" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Sewa</label>
+                  <input name="tanggal_sewa" type="date" id="tanggal_sewa" class="form-control datepicker">
+                  </di>
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Kembali</label>
+                  <input name="tanggal_kembali" id="tanggal_kembali" type="date" class="form-control datepicker">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-info" value="Buat Transaksi">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Update -->
+  <div class="modal fade" id="modalUpdateTransaksi" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Transaksi</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="form-update-transaksi" method="POST">
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Nama barang</label>
+                  <input type="text" name="nama_barang" id="nb" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengiriman/Pengambilan</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="pengiriman" id="kirim" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pembayaran</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-money-bill-alt"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="pembayaran" id="byr" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <label>Pengembalian</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-boxes"></i>
+                    </div>
+                  </div>
+                  <input type="text" name="pengembalian" id="return" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Sewa</label>
+                  <input name="tanggal_sewa" type="date" id="ts" class="form-control datepicker">
+                  </di>
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal Kembali</label>
+                  <input name="tanggal_kembali" id="tk" type="date" class="form-control datepicker">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-info" value="Edit Transaksi">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btnInfo = document.getElementsByTagName('tr')
+    let idx, res
+    for (idx = 0; idx < btnInfo.length; idx++) {
+      let a = btnInfo[idx + 1].getElementsByTagName('td')[11].getElementsByTagName('button')[0]
+      a.addEventListener('click', () => {
+        res = a.getAttributeNode('data-id').textContent.split(',')
+        document.getElementById('nama_barang').setAttribute('value', res[0])
+        document.getElementById('pengiriman').setAttribute('value', res[1].split('/', 1))
+        document.getElementById('pengembalian').setAttribute('value', res[1].split('/', 2, 1)[1])
+        document.getElementById('pembayaran').setAttribute('value', res[2])
+        document.getElementById('tanggal_sewa').setAttribute('value', res[3])
+        document.getElementById('tanggal_kembali').setAttribute('value', res[4])
+      })
+    }
+
+
+  </script>
+  <script>
+    const id = document.getElementById('formCreate').getAttribute('data-id')
+    const btnUpdate = document.getElementsByTagName('tr')
+    let j, result
+    for (j = 0; j < btnUpdate.length; j++) {
+      let a = btnUpdate[j + 1].getElementsByTagName('td')[11].getElementsByTagName('button')[1]
+      a.addEventListener('click', () => {
+        result = a.getAttributeNode('data-id').textContent.split(',')
+        document.getElementById('form-update-transaksi').setAttribute('action', `/user/${id}/transaksi/${result[5]}`)
+        document.getElementById('nb').setAttribute('value', result[0])
+        document.getElementById('kirim').setAttribute('value', result[1].split('/', 1))
+        document.getElementById('return').setAttribute('value', result[1].split('/', 2, 1)[1])
+        document.getElementById('byr').setAttribute('value', result[2])
+        document.getElementById('ts').setAttribute('value', result[3])
+        document.getElementById('tk').setAttribute('value', result[4])
+      })
+    }
+  </script>
 
   <!-- General JS Scripts -->
   <script src="/assets/modules/jquery.min.js"></script>
@@ -319,3 +553,7 @@
 </body>
 
 </html>
+{{!-- document.getElementById('form-update').setAttribute('action', '/admin/{{profile.id_admin}}/barang/update/' + `${res[0]}`)
+        document.getElementById('nama_barang').setAttribute('value', res[1])
+        document.getElementById('harga_barang').setAttribute('value', res[2])
+        document.getElementById('stock').setAttribute('value', res[3]) --}}
